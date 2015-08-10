@@ -17,7 +17,7 @@ set [ find default-name=wlan1 ] band=2ghz-b/g/n channel-width=\
     20/40mhz-ht-above disabled=no frequency=2412 hide-ssid=yes l2mtu=2290 \
     mode=ap-bridge name=goddard-ap security-profile=goddard ssid=goddard
 add disabled=no l2mtu=2290 mac-address=4E:5E:0C:D6:2C:84 master-interface=\
-    goddard-ap name=uksa-ap ssid=UKSA
+    goddard-ap name=uksa-ap ssid=MAMAConnect
 /ip neighbor discovery
 set goddard-ap discover=no
 /ip pool
