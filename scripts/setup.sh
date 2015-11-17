@@ -192,10 +192,8 @@ if [ ! -f /var/goddard/setup.lock ]; then
 		running_docker_status=$(docker ps)
 
 		# clean up the docker output
-		cleaned_docker_status=$(echo $running_docker_status | sed -r 's/[\"]+/\\\"/g')
-		# cleaned_docker_status=$(python2 -c 'import sys, urllib; print urllib.quote(sys.argv[1])' "$running_docker_status")
-
-		# done
+		# cleaned_docker_status=$(echo $running_docker_status | sed -r 's/[\"]+/\\\"/g')
+		cleaned_docker_status=$(echo -n "$running_docker_status" | python -c 'import json,sys; print json.dumps(sys.stdin.read())')
 		echo "{\"build\":\"busy\",\"process\":\"Output from Docker: ${cleaned_docker_status}\",\"timestamp\":\"$( date +%s )\"}"  > /var/goddard/build.json
 
 		# post to server
