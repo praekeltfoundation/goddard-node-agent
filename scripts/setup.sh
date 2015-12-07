@@ -211,6 +211,8 @@ while read TKEY TDOMAIN TPORT; do
 	CONTAINER=$(echo "${ID_TO_IMAGE}" | grep "${TKEY}" | cat)
 	
 	echo $TKEY
+	
+	NEW_VIRTUAL_HOST "${NGINX_CONFD_PATH}/${TDOMAIN}.conf" "${TDOMAIN}" "${TKEY}" "${TPORT}"
 
 	if [[ "${CONTAINER}" != "" && "${DIFF}" -gt 0 ]]; then
 		echo "container IS running AND diff IS detected"
