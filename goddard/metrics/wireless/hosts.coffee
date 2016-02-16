@@ -13,6 +13,7 @@ module.exports = exports = (params, fn) ->
 	# handles any error
 	handleConnectionErrors = (err) ->
 
+		console.log('wireless hosts error', err)
 		# connection error, finish with our callback
 		doCallbackCall(null, {wireless: {status: 'error'}})
 
