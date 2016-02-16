@@ -22,9 +22,8 @@ module.exports = exports = (params, fn) ->
 
 	}
 
-	# the array of enabled metrics
-	metricHandlers = [
-
+	# execute each of them the function and collect the result.
+	async.each([
 		require('./node/system'),
 		require('./node/disk'),
 		require('./node/memory'),
@@ -32,27 +31,15 @@ module.exports = exports = (params, fn) ->
 		require('./router/hosts'),
 		require('./wireless/hosts'),
 		require('./relay')
-
-	]
-
-	# handles collecting the result
-	handleCollection = (metricHandler, cb) ->
-
+	], ((metricHandler, cb) ->
 		# run the metric to collect
 		metricHandler(params, (err, output) ->
-
 			# if we got no error
-			if output
-				payload = _.merge(payload, output)
-
+			payload = _.merge(payload, output) if output
 			# return with the error if any
-			cb(null)
-
+			cb(err)
 		)
-
-	# execute each of them the function and collect the result.
-	async.each metricHandlers, handleCollection, (err) ->
-
+	), (err) ->
 		# timing
 		started = new Date().getTime()
 
@@ -60,8 +47,7 @@ module.exports = exports = (params, fn) ->
 		server_host_url = params.argv.server or params.node.server or '6fcf9014.ngrok.com'
 
 		# add in the server host url
-		if server_host_url.indexOf('http://') == -1
-			server_host_url = 'http://' + server_host_url
+		server_host_url = 'http://' + server_host_url if server_host_url.indexOf('http://') == -1
 
 		# create the metric endpoint
 		metric_endpoint_url_str = server_host_url + '/metric.json'
@@ -94,16 +80,12 @@ module.exports = exports = (params, fn) ->
 		else
 
 			# send it out
-			request {
-
+			request({
 				url: metric_endpoint_url_str,
 				method: 'POST',
 				timeout: 5000 * 5,
-				headers: {
-					"content-type": "application/json"
-				},
+				headers: {"content-type": "application/json"},
 				json: payload
-
 			}, (err, response, body) -> 	
 
 				# response debugging
@@ -112,3 +94,5 @@ module.exports = exports = (params, fn) ->
 
 				# handle it
 				metricsCallback(err, payload)
+			)
+	)

@@ -9,6 +9,25 @@
 # modules
 fs = require('fs')
 
+local_settings = ->
+	try
+		contents = fs.readFileSync(
+			'/var/goddard/node_updater/local_settings.py'
+		).toString('utf8')
+	catch e
+		console.log('local_settings.py not found!', 'reverting to built-in goddard/constants.coffee...')
+		return {}
+	
+	lines = contents.trim().split('\n')
+	settings = {}
+	lines.forEach((line, arr, idx) ->
+		line = line.split('=').map((setting) ->
+			return setting.trim()
+		)
+		settings[line[0]] = line[1].slice(1, -1)
+	)
+	return settings
+
 # parse the parameters
 argv = require('minimist')(process.argv.slice(2))
 
@@ -17,12 +36,11 @@ if argv.action
 
 	# generate the params
 	runParams = {
-		
 		uid: '',
 		constants: require('./constants'),
 		node: {},
 		argv: argv
-
+		local_settings: local_settings()
 	}
 
 	# check if we know it ?
