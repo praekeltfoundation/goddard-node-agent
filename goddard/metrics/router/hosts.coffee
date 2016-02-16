@@ -6,7 +6,7 @@ module.exports = exports = (params, fn) ->
 	# run the callback
 	already_calledback = false
 	doCallbackCall = (err, type_str) ->
-		if already_calledback == false
+		unless already_calledback
 			fn(err, type_str)
 			already_calledback = true
 
@@ -14,23 +14,17 @@ module.exports = exports = (params, fn) ->
 	handleConnectionErrors = (err) ->
 
 		# connection error, finish with our callback
-		doCallbackCall(null, {
-
-				wireless: {
-
-					status: 'error'
-
-				}
-
-			})
+		doCallbackCall(null, {wireless: {status: 'error'}})
 
 	try
 		# right so if we got here this was probably from boot
 		# ping the main router and configure it
 		mikroApi = require('mikronode')
-		connection = new mikroApi(params.constants.mikrotik.ip.router,params.constants.mikrotik.username,params.constants.mikrotik.password)
-
-
+		connection = new mikroApi(
+		  params.constants.mikrotik.ip.router,
+		  process.env.NODE_MIKROTIK_USERNAME ? params.constants.mikrotik.username,
+		  process.env.NODE_MIKROTIK_PASSWORD ? params.constants.mikrotik.password
+		)
 
 		# done !
 		connection.connect (conn) ->
@@ -58,15 +52,7 @@ module.exports = exports = (params, fn) ->
 					conn.close(true)
 
 					# done
-					doCallbackCall(null, {
-
-							router: {
-
-								hosts: parsed
-
-							}
-
-						})
+					doCallbackCall(null, {router: {hosts: parsed}})
 
 		# handle errors
 		connection.on 'error', handleConnectionErrors
