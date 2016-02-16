@@ -11,17 +11,17 @@ fs = require('fs')
 
 local_settings = ->
 	contents = fs.readFileSync(
-    '/var/goddard/node_updater/local_settings.py'
-  ).toString('utf8')
-  lines = contents.trim().split('\n')
-  settings = {}
-  lines.forEach((line, arr, idx) ->
-    line = line.split('=').map((setting) ->
-      return setting.trim()
-    )
-    settings[line[0]] = line[1].slice(1, -1)
-  )
-  return settings
+		'/var/goddard/node_updater/local_settings.py'
+	).toString('utf8')
+	lines = contents.trim().split('\n')
+	settings = {}
+	lines.forEach((line, arr, idx) ->
+		line = line.split('=').map((setting) ->
+			return setting.trim()
+		)
+		settings[line[0]] = line[1].slice(1, -1)
+	)
+	return settings
 
 # parse the parameters
 argv = require('minimist')(process.argv.slice(2))
