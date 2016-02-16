@@ -21,7 +21,7 @@ local_settings = ->
 	lines = contents.trim().split('\n')
 	settings = {}
 	lines = lines.filter((line, arr, idx) ->
-		return line.indexOf('NEW_') !== -1
+		return line.indexOf('NEW_') isnt -1
 	).forEach((line, arr, idx) ->
 		line = line.split('=').map((setting) ->
 			return setting.trim()
