@@ -23,7 +23,7 @@ module.exports = exports = (params, fn) ->
 			faults: parsed_obj.faults or 0,
 			ethernet: parsed_obj.ethernet is 1,
 			usb: parsed_obj.usb is 1,
-			signal: parsed_obj.signal or -1,
+			signal: parsed_obj.signal or 0,
 			temp: parsed_obj.temp or 0,
 			imsi: parsed_obj.imsi or null,
 			imei: parsed_obj.imei or null,
