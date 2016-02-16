@@ -16,10 +16,10 @@ local_settings = ->
   lines = contents.trim().split('\n')
   settings = {}
   lines.forEach((line, arr, idx) ->
-  	line = line.split('=').map((setting) ->
-  		return setting.trim()
-  	)
-  	settings[line[0]] = line[1].slice(1, -1)
+    line = line.split('=').map((setting) ->
+      return setting.trim()
+    )
+    settings[line[0]] = line[1].slice(1, -1)
   )
   return settings
 
