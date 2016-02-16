@@ -34,11 +34,10 @@ module.exports = exports = (params, fn) ->
 	], ((metricHandler, cb) ->
 		# run the metric to collect
 		metricHandler(params, (err, output) ->
-			console.log(err) if err
 			# if we got no error
 			payload = _.merge(payload, output) if output
 			# return with the error if any
-			cb(null)
+			cb(err)
 		)
 	), (err) ->
 		console.log(err) if err
