@@ -40,7 +40,6 @@ module.exports = exports = (params, fn) ->
 			cb(err)
 		)
 	), (err) ->
-		console.log(err) if err
 		# timing
 		started = new Date().getTime()
 
