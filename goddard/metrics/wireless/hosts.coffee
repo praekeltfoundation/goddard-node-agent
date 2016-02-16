@@ -22,8 +22,8 @@ module.exports = exports = (params, fn) ->
 		mikroApi = require('mikronode')
 		connection = new mikroApi(
 		  params.constants.mikrotik.ip.wireless,
-		  process.env.NODE_MIKROTIK_USERNAME ? params.constants.mikrotik.username,
-		  process.env.NODE_MIKROTIK_PASSWORD ? params.constants.mikrotik.password
+		  params.constants.mikrotik.username,
+		  params.local_settings.NEW_RB750_PASSWORD ? params.constants.mikrotik.password
 		)
 
 		connection.connect (conn) ->
