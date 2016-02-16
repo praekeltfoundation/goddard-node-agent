@@ -10,9 +10,14 @@
 fs = require('fs')
 
 local_settings = ->
-	contents = fs.readFileSync(
-		'/var/goddard/node_updater/local_settings.py'
-	).toString('utf8')
+	try
+		contents = fs.readFileSync(
+			'/var/goddard/node_updater/local_settings.py'
+		).toString('utf8')
+	catch e
+		console.log('local_settings.py not found!', 'reverting to built-in goddard/constants.coffee...')
+		return {}
+	
 	lines = contents.trim().split('\n')
 	settings = {}
 	lines.forEach((line, arr, idx) ->
