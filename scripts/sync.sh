@@ -18,23 +18,25 @@ curl \
   http://hub.goddard.unicore.io/report.json?uid=$(cat /var/goddard/node.json | jq -r '.uid') \
   --header "Content-Type:application/json"
 
-# refresh the folder sizes BEFORE the rsync
-du --max-depth=5 -c -h /var/goddard/media > /var/goddard/media_sizes.log
+# refresh the folder sizes before the rsync
+du -ach /var/goddard/media > /var/goddard/media_du_human.log
+du -ac /var/goddard/media > /var/goddard/media_du_machine.log
 
 # remove the old rsync log file if it exists
-rm /var/goddard/media_sync.log || true
+rm /var/goddard/media_rsync.log || true
 
 # execute script to pull down new media using Rsync
 rsync \ 
   -aPzri \
   --delete \
   --progress \
-  --log-file=/var/goddard/media_sync.log \
+  --log-file=/var/goddard/media_rsync.log \
   node@hub.goddard.unicore.io:/var/goddard/media/ \
   /var/goddard/media
 
-# refresh the folder sizes AFTER the rsync
-du --max-depth=5 -c -h /var/goddard/media > /var/goddard/media_sizes.log
+# refresh the folder sizes after the rsync
+du -ach /var/goddard/media > /var/goddard/media_du_human.log
+du -ac /var/goddard/media > /var/goddard/media_du_machine.log
 
 # done
 echo "{
