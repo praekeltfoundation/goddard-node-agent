@@ -6,31 +6,27 @@ module.exports = exports = (params, fn) ->
 	# run the callback
 	already_calledback = false
 	doCallbackCall = (err, type_str) ->
-		if already_calledback == false
+		unless already_calledback
 			fn(err, type_str)
 			already_calledback = true
 
 	# handles any error
 	handleConnectionErrors = (err) ->
 
+		console.log('wireless hosts error', err)
 		# connection error, finish with our callback
-		doCallbackCall(null, {
-
-				wireless: {
-
-					status: 'error'
-
-				}
-
-			})
+		doCallbackCall(null, {wireless: {status: 'error'}})
 
 	try
 		# right so if we got here this was probably from boot
 		# ping the main router and configure it
 		mikroApi = require('mikronode')
-		connection = new mikroApi(params.constants.mikrotik.ip.wireless,params.constants.mikrotik.username,params.constants.mikrotik.password)
+		connection = new mikroApi(
+		  params.constants.mikrotik.ip.wireless,
+		  params.constants.mikrotik.username,
+		  params.local_settings.NEW_RB750_PASSWORD ? params.constants.mikrotik.password
+		)
 
-		# done !
 		connection.connect (conn) ->
 
 			# open the channel

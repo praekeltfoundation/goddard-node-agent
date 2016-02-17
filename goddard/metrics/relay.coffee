@@ -10,6 +10,7 @@ module.exports = exports = (params, fn) ->
 
 	# get the entire state of the relay
 	webrelay.state params.constants.relay.ip, (err, res) ->
+		console.log('relay error', err) if err
 
 		# check for a error
 		if err
@@ -17,6 +18,7 @@ module.exports = exports = (params, fn) ->
 		else
 			# parse out the XML response from the relay
 			parseString res, (err, parsed_result_obj) ->
+				console.log('relay error', err) if err
 				
 				# check for a error
 				if err
