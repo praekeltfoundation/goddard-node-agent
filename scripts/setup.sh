@@ -162,6 +162,8 @@ UNLINK_SETUP_LOCK() {
 	rm /var/goddard/setup.lock || true
 }
 
+date
+
 sudo mkdir -p "${GODDARD_BASE_PATH}"
 
 if [[ -f "${LOCK_FILE_PATH}" ]]; then exit 1; fi
