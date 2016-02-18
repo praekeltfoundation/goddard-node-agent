@@ -22,8 +22,8 @@ curl \
 du -ach /var/goddard/media > /var/goddard/media_du_human.log
 du -ac /var/goddard/media > /var/goddard/media_du_machine.log
 
-# remove the old rsync log file if it exists
-rm /var/goddard/media_rsync.log || true
+# mangle the original log
+echo "" > /var/goddard/media_rsync.log
 
 # execute script to pull down new media using Rsync
 rsync \ 
