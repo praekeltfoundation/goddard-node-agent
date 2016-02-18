@@ -6,6 +6,8 @@ chmod a+x scripts/setup.sh
 # echo now
 echo "Starting provision service that will run every few hours/minutes to provision apps"
 
+last_ret_code=0
+
 # continues while loop
 while :
 do
@@ -29,10 +31,11 @@ do
 	chmod a+x scripts/setup.sh	
 
 	# execute command and update status code for done
-	./scripts/setup.sh
+	./scripts/setup.sh $last_ret_code
 
 	# get the code
 	ret_code=$?
+	last_ret_code=$ret_code
 
 	# debug
 	echo "Setup script is done running"
