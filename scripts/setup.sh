@@ -245,7 +245,7 @@ while read TKEY TDOMAIN TPORT; do
 			cd "${GODDARD_APPS_BASE_PATH}/${TKEY}"
 			docker build --tag="${TKEY}" --rm=true "."
 			echo "${TKEY} is not running!"
-			docker kill $CONTAINER
+			docker kill $(echo "${CONTAINER}" | awk '{print $1}')
 			NEW_CONTAINER "${TKEY}" "${TDOMAIN}" "${TPORT}"
 		fi
 		NEW_VIRTUAL_HOST "${NGINX_CONFD_PATH}/${TDOMAIN}.conf" "${TDOMAIN}" "${TKEY}" "${TPORT}"
