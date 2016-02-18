@@ -40,7 +40,7 @@ du -ac /var/goddard/media > /var/goddard/media_du_machine.log
 
 # done
 echo "{
-  \"build\":\"busy\",
+  \"build\":\"done\",
   \"process\":\"Media cache finished downloading\",
   \"timestamp\":\"$(date +%s)\"
 }" > /var/goddard/build.json
