@@ -13,7 +13,11 @@ curl --silent -X POST -d @/var/goddard/build.json http://hub.goddard.unicore.io/
 rsync -aPzri --delete --progress node@hub.goddard.unicore.io:/var/goddard/media/ /var/goddard/media
 
 # done
-echo "{\"build\":\"busy\",\"process\":\"Media cache finished downloading\",\"timestamp\":\"$( date +%s )\"}"  > /var/goddard/build.json
+echo "{
+  \"build\":\"done\",
+  \"process\":\"Media cache finished downloading\",
+  \"timestamp\":\"$( date +%s )\"
+}"  > /var/goddard/build.json
 
 # post to server
 curl --silent -X POST -d @/var/goddard/build.json http://hub.goddard.unicore.io/report.json?uid=$(cat /var/goddard/node.json | jq -r '.uid') --header "Content-Type:application/json"
