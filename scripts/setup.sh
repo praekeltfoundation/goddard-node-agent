@@ -14,6 +14,8 @@ APPS_KEYS_TXT_PATH="${GODDARD_BASE_PATH}/apps.keys.txt"
 NGINX_CONFD_PATH="/etc/nginx/conf.d"
 HUB_GODDARD_UNICORE="hub.goddard.unicore.io"
 
+last_ret_code=$1
+
 NEW_VIRTUAL_HOST() {
 	local VIRTUAL_HOST_PATH="${1}"
 	local TDOMAIN="${2}"
@@ -238,6 +240,14 @@ while read TKEY TDOMAIN TPORT; do
 		NEW_CONTAINER "${TKEY}" "${TDOMAIN}" "${TPORT}"
 	else
 		echo "container IS running AND diff ISNT detected"
+		if [[ $last_ret_code != "0" ]]; then
+			POST_BUILD_JSON_BUSY "Building ${TDOMAIN}"
+			cd "${GODDARD_APPS_BASE_PATH}/${TKEY}"
+			docker build --tag="${TKEY}" --rm=true "."
+			echo "${TKEY} is not running!"
+			docker kill $(echo "${CONTAINER}" | awk '{print $1}')
+			NEW_CONTAINER "${TKEY}" "${TDOMAIN}" "${TPORT}"
+		fi
 		NEW_VIRTUAL_HOST "${NGINX_CONFD_PATH}/${TDOMAIN}.conf" "${TDOMAIN}" "${TKEY}" "${TPORT}"
 		true
 	fi
