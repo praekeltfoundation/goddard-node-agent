@@ -267,7 +267,6 @@ POST_BUILD_JSON_DONE
 UNLINK_SETUP_LOCK
 
 # ensure proxy is runnable
-chmod a+x /var/goddard/agent/scripts/proxy.sh	
-/var/goddard/agent/scripts/proxy.sh
+sh /var/goddard/agent/scripts/proxy.sh
 
 exit 0
