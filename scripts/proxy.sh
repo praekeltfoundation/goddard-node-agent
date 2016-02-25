@@ -29,7 +29,7 @@ if [ ! -f "/var/goddard/proxy.lock" ];
   sudo apt-get install squid sshpass -y
 
   # update the config
-  cp templates/squid.conf /etc/squid3/squid.conf
+  cp /var/goddard/agent/templates/squid.conf /etc/squid3/squid.conf
 
   # create the error folder
   mkdir -p /etc/squid3/errors/
