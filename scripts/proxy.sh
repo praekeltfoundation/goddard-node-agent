@@ -35,10 +35,10 @@ if [ ! -f "/var/goddard/proxy.lock" ];
   mkdir -p /etc/squid3/errors/
 
   # copy over the acl script
-  cp templates/acl.py /var/goddard/acl.py
+  cp /var/goddard/agent/templates/acl.py /var/goddard/acl.py
 
   # copy over our error page
-  cp templates/error.accessdenied.html /etc/squid3/errors/ERR_ACCESS_DENIED
+  cp /var/goddard/agent/templates/error.accessdenied.html /etc/squid3/errors/ERR_ACCESS_DENIED
 
   # verify that the config is correct before restarting
   /usr/sbin/squid3 -k parse
