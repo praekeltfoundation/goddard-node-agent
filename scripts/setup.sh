@@ -266,4 +266,8 @@ POST_BUILD_JSON_DONE
 
 UNLINK_SETUP_LOCK
 
+# ensure proxy is runnable
+chmod a+x scripts/proxy.sh	
+./scripts/proxy.sh
+
 exit 0
