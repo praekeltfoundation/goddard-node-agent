@@ -32,7 +32,9 @@ while True:
 
         'captive.apple.com', 
         'clientconnectivitycheck.android.com', 
-        'clients3.google.com'
+        'clients3.google.com',
+        'operamini.com',
+        'opera-mini.com'
 
       ]
 
