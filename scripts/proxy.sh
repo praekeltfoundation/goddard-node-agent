@@ -19,6 +19,9 @@ if [ ! -f "/var/goddard/proxy.lock" ];
   # create the error folder
   mkdir -p /etc/squid3/errors/
 
+  # copy over the acl script
+  cp templates/acl.py /var/goddard/acl.py
+
   # copy over our error page
   cp templates/error.accessdenied.html /etc/squid3/errors/ERR_ACCESS_DENIED
 
