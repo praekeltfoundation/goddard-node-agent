@@ -49,9 +49,6 @@ if [ ! -f "/var/goddard/proxy.lock" ];
   # pull out the password for the 750
   ROUTER_PASSWORD=$(python -c "import imp; localsettings=imp.load_source('localsettings', '/var/goddard/node_updater/local_settings.py'); print localsettings.NEW_RB750_PASSWORD")
 
-  # debug
-  echo "Found Password: $ROUTER_PASSWORD" 
-
   # run the commands to migrate changes over to mikrotik
   RUN_COMMAND "/ip hotspot user profile set 0 transparent-proxy=yes"
   RUN_COMMAND "/ip proxy set enabled=yes"
