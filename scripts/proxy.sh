@@ -3,23 +3,35 @@
 # listen for any issues
 set -e
 
-# update apt first
-sudo apt-get update
+# don't run if already setup
+if [ ! -f "/var/goddard/proxy.lock" ]; 
+  then
 
-# install squid 
-sudo apt-get install squid -y
+  # update apt first
+  sudo apt-get update
 
-# update the config
-cp ../templates/squid.conf /etc/squid3/squid.conf
+  # install squid 
+  sudo apt-get install squid -y
 
-# create the error folder
-mkdir -p /etc/squid3/errors/
+  # update the config
+  cp ../templates/squid.conf /etc/squid3/squid.conf
 
-# copy over our error page
-cp ../templates/error.accessdenied.html /etc/squid3/errors/ERR_ACCESS_DENIED
+  # create the error folder
+  mkdir -p /etc/squid3/errors/
 
-# restart the squid instance to load new config
-service squid3 restart
+  # copy over our error page
+  cp ../templates/error.accessdenied.html /etc/squid3/errors/ERR_ACCESS_DENIED
+
+  # verify that the config is correct before restarting
+  /usr/sbin/squid3 -k parse
+
+  # restart the squid instance to load new config
+  service squid3 restart
+
+  # write our log file
+  date > /var/goddard/proxy.lock
+
+fi
 
 ####
 # TODO update mikrotik
