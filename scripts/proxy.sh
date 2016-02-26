@@ -40,6 +40,9 @@ if [ ! -f "/var/goddard/proxy.lock" ];
   # verify that the config is correct before restarting
   /usr/sbin/squid3 -k parse
 
+  # create the file
+  touch /var/goddard/whitelist
+
   # restart the squid instance to load new config
   service squid3 restart
 
