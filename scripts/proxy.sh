@@ -75,6 +75,12 @@ sudo cat <<-EOF > /var/goddard/wpad.dat
   }
 EOF
 
+# update whitelist
+python /var/goddard/agent/templates/acl.py > /var/goddard/whitelist
+
+# verify that the config is correct before restarting
+/usr/sbin/squid3 -k reconfigure
+
 # reload nginx
 service nginx reload || true
 
