@@ -4,17 +4,14 @@
 set -e
 
 RUN_COMMAND() {
-
-  # get the local command var we can use
-  local COMMAND="${1}"
   
   # pull out the password for the 750
   ROUTER_PASSWORD=$(python -c "import imp; localsettings=imp.load_source('localsettings', '/var/goddard/node_updater/local_settings.py'); print localsettings.RB750_PASSWORD")
   NEW_ROUTER_PASSWORD=$(python -c "import imp; localsettings=imp.load_source('localsettings', '/var/goddard/node_updater/local_settings.py'); print localsettings.NEW_RB750_PASSWORD")
 
   # run it with both password to work with all the nodes
-  echo "${COMMAND}" | sshpass -p "$ROUTER_PASSWORD" ssh admin@192.168.88.5 || true
-  echo "${COMMAND}" | sshpass -p "$NEW_ROUTER_PASSWORD" ssh admin@192.168.88.5 || true
+  echo "$1" | sshpass -p "$ROUTER_PASSWORD" ssh -o "StrictHostKeyChecking no" admin@192.168.88.5 || true
+  echo "$1" | sshpass -p "$NEW_ROUTER_PASSWORD" ssh -o "StrictHostKeyChecking no" admin@192.168.88.5 || true
 
 }
 
@@ -46,8 +43,12 @@ if [ ! -f "/var/goddard/proxy.lock" ];
   # restart the squid instance to load new config
   service squid3 restart
 
+  # do a keyscan to be sure we can execute the commands
+  ssh-keyscan 192.168.88.5 >> ~/.ssh/known_hosts
+
   # run the commands to migrate changes over to mikrotik
   RUN_COMMAND "/ip dhcp-server option add name=wpad code=252 value="'http://wpad.mamawifi.com:80/wpad.dat'""
+  RUN_COMMAND "/ip dhcp-server network set 0 dhcp-option=wpad"
   RUN_COMMAND "/ip dhcp-server network set 1 dhcp-option=wpad"
   RUN_COMMAND "/ip hotspot walled-garden remove numbers=[/ip hotspot walled-garden find ]"
   RUN_COMMAND "/ip hotspot walled-garden add action=allow dst-host=192.168.88.5 server=hotspot1"
