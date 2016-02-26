@@ -46,17 +46,13 @@ if [ ! -f "/var/goddard/proxy.lock" ];
   # restart the squid instance to load new config
   service squid3 restart
 
-  # pull out the password for the 750
-  ROUTER_PASSWORD=$(python -c "import imp; localsettings=imp.load_source('localsettings', '/var/goddard/node_updater/local_settings.py'); print localsettings.NEW_RB750_PASSWORD")
-
   # run the commands to migrate changes over to mikrotik
-  RUN_COMMAND "/ip hotspot user profile set 0 transparent-proxy=yes"
-  RUN_COMMAND "/ip proxy set enabled=yes"
-  RUN_COMMAND "/ip proxy set parent-proxy=192.168.88.50 set parent-proxy-port=3128"
+  RUN_COMMAND "/ip dhcp-server option add name=wpad code=252 value="'http://wpad.mamawifi.com:80/wpad.dat'""
+  RUN_COMMAND "/ip dhcp-server network set 1 dhcp-option=wpad"
   RUN_COMMAND "/ip hotspot walled-garden remove numbers=[/ip hotspot walled-garden find ]"
-  RUN_COMMAND "/ip hotspot walled-garden add action=deny dst-host=192.168.88.5 server=hotspot1"
-  RUN_COMMAND "/ip hotspot walled-garden add action=deny dst-host=192.168.88.10 server=hotspot1"
-  RUN_COMMAND "/ip hotspot walled-garden add action=deny dst-host=192.168.88.50 server=hotspot1"
+  RUN_COMMAND "/ip hotspot walled-garden add action=allow dst-host=192.168.88.5 server=hotspot1"
+  RUN_COMMAND "/ip hotspot walled-garden add action=allow dst-host=192.168.88.10 server=hotspot1"
+  RUN_COMMAND "/ip hotspot walled-garden add action=allow dst-host=192.168.88.50 server=hotspot1"
   RUN_COMMAND "/ip hotspot walled-garden add action=allow dst-host=* server=hotspot1"
 
   # write our log file

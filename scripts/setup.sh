@@ -260,6 +260,26 @@ REMOVE_STALE_CONTAINERS
 
 REMOVE_UNNEEDED_VIRTUAL_HOSTS
 
+# write out WPAD config
+sudo cat <<-EOF > /etc/nginx/conf.d/wpad.mamawifi.com.conf
+		server {
+		listen              80;
+		server_name         wpad.goddard.com wpad.mamawifi.com;
+		root                /var/goddard;
+		access_log          /var/log/nginx/wpad.mamawifi.com.log;
+		}
+	EOF
+
+sudo cat <<-EOF > /var/goddard/wpad.dat
+		function FindProxyForURL(url, host)
+		{
+		if (isInNet(host, "192.168.88.0", "255.255.255.0"))
+		return "DIRECT";
+		else
+		return "PROXY 192.168.88.50:3128";
+		}
+	EOF
+
 service nginx reload || true
 
 POST_BUILD_JSON_DONE
