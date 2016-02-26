@@ -51,10 +51,10 @@ if [ ! -f "/var/goddard/proxy.lock" ];
   RUN_COMMAND "/ip dhcp-server network set 0 dhcp-option=wpad"
   RUN_COMMAND "/ip dhcp-server network set 1 dhcp-option=wpad"
   RUN_COMMAND "/ip hotspot walled-garden remove numbers=[/ip hotspot walled-garden find ]"
-  RUN_COMMAND "/ip hotspot walled-garden add action=allow dst-host=192.168.88.5 server=hotspot1"
-  RUN_COMMAND "/ip hotspot walled-garden add action=allow dst-host=192.168.88.10 server=hotspot1"
+  RUN_COMMAND "/ip hotspot walled-garden add action=deny dst-host=192.168.88.5 server=hotspot1"
+  RUN_COMMAND "/ip hotspot walled-garden add action=deny dst-host=192.168.88.10 server=hotspot1"
   RUN_COMMAND "/ip hotspot walled-garden add action=allow dst-host=192.168.88.50 server=hotspot1"
-  RUN_COMMAND "/ip hotspot walled-garden add action=allow dst-host=* server=hotspot1"
+  RUN_COMMAND "/ip hotspot walled-garden add action=deny dst-host=* server=hotspot1"
 
   # write our log file
   date > /var/goddard/proxy.lock
