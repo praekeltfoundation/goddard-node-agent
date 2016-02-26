@@ -47,7 +47,7 @@ if [ ! -f "/var/goddard/proxy.lock" ];
   ssh-keyscan 192.168.88.5 >> ~/.ssh/known_hosts
 
   # run the commands to migrate changes over to mikrotik
-  RUN_COMMAND "/ip dhcp-server option add name=wpad code=252 value="'http://wpad.mamawifi.com:80/wpad.dat'""
+  RUN_COMMAND "/ip dhcp-server option add name=wpad code=252 value=\"'http://wpad.mamawifi.com:80/wpad.dat'\""
   RUN_COMMAND "/ip dhcp-server network set 0 dhcp-option=wpad"
   RUN_COMMAND "/ip dhcp-server network set 1 dhcp-option=wpad"
   RUN_COMMAND "/ip hotspot walled-garden remove numbers=[/ip hotspot walled-garden find ]"
@@ -60,6 +60,20 @@ if [ ! -f "/var/goddard/proxy.lock" ];
   date > /var/goddard/proxy.lock
 
 fi
+
+# write out the wpad config file
+sudo cat <<-EOF > /var/goddard/wpad.dat
+  function FindProxyForURL(url, host)
+  {
+  if (isInNet(host, "192.168.88.0", "255.255.255.0"))
+  return "DIRECT";
+  else
+  return "PROXY 192.168.88.50:3128";
+  }
+EOF
+
+# reload nginx
+service nginx reload || true
 
 ####
 # TODO update mikrotik
