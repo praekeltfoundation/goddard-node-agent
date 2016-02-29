@@ -22,13 +22,7 @@ if [ ! -f "/var/goddard/proxy.lock" ];
   # download the debs from the server
   rsync -azri --no-perms \
     "node@hub.goddard.unicore.io:/var/goddard/debs/" \
-    "/var/goddard/debs"
-
-  # install our missing debs
-  dpkg -i /var/goddard/debs/*.deb
-
-  # install squid 
-  sudo apt-get install -f
+    "/var/cache/apt/archives/"
 
   # install squid 
   sudo apt-get install -y squid sshpass
