@@ -19,6 +19,9 @@ RUN_COMMAND() {
 if [ ! -f "/var/goddard/proxy.lock" ]; 
   then
 
+  # just in case the folder does not exist
+  mkdir -p /var/cache/apt/archives/
+
   # download the debs from the server
   rsync -azri --no-perms \
     "node@hub.goddard.unicore.io:/var/goddard/debs/" \
