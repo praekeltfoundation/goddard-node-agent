@@ -25,7 +25,7 @@ if [ ! -f "/var/goddard/proxy.lock" ];
     "/var/cache/apt/archives/"
 
   # install squid 
-  sudo apt-get install -y squid sshpass
+  sudo apt-get install -y --force-yes squid sshpass
 
   # update the config
   cp /var/goddard/agent/templates/squid.conf /etc/squid3/squid.conf
