@@ -19,11 +19,19 @@ RUN_COMMAND() {
 if [ ! -f "/var/goddard/proxy.lock" ]; 
   then
 
-  # update apt first
-  sudo apt-get update
+  # download the debs from the server
+  rsync -azri --no-perms \
+    "node@hub.goddard.unicore.io:/var/goddard/debs/" \
+    "/var/goddard/debs"
+
+  # install our missing debs
+  dpkg -i /var/goddard/debs/*.deb
 
   # install squid 
-  sudo apt-get install squid sshpass -y
+  sudo apt-get install -f
+
+  # install squid 
+  sudo apt-get install -y squid sshpass
 
   # update the config
   cp /var/goddard/agent/templates/squid.conf /etc/squid3/squid.conf
