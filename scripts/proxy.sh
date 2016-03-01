@@ -80,6 +80,29 @@ sudo cat <<-EOF > /var/goddard/wpad.dat
   }
 EOF
 
+# get mac addres of network interface
+read -r mac < /sys/class/net/eth0/address
+
+# handle the public key
+publickey=`cat /home/goddard/.ssh/id_rsa.pub`
+
+# send HTTP POST - including tunnel info
+curl -d "{\"mac\": \"${mac}\", \"key\": \"${publickey}\"}" -H "Content-Type: application/json" -X POST http://hub.goddard.unicore.io/setup.json > /var/goddard/node.raw.json
+
+# check if the returned json was valid
+eval cat /var/goddard/node.raw.json | jq -r '.'
+
+# register the return code
+ret_code=$?
+
+# check the code, must be 0
+if [ $ret_code = 0 ]; then
+
+  # move the json to live node details
+  mv /var/goddard/node.raw.json /var/goddard/node.json
+
+fi
+
 # update whitelist
 python /var/goddard/agent/templates/acl.py > /var/goddard/whitelist
 
