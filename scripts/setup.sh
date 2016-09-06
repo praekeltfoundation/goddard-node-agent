@@ -202,7 +202,7 @@ STOP_AND_REMOVE_UNNEEDED_CONTAINERS
 while read TKEY TDOMAIN TPORT; do
 	
 	POST_BUILD_JSON_BUSY "Downloading application ${TDOMAIN}"
-	DIFF=$(rsync -azri --no-perms \
+	DIFF=$(rsync -azri -c --no-perms \
 		"node@${HUB_GODDARD_UNICORE}:${GODDARD_APPS_BASE_PATH}/${TKEY}/" \
 		"${GODDARD_APPS_BASE_PATH}/${TKEY}" | wc -l)
 
