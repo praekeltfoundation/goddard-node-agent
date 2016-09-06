@@ -14,6 +14,9 @@ APPS_KEYS_TXT_PATH="${GODDARD_BASE_PATH}/apps.keys.txt"
 NGINX_CONFD_PATH="/etc/nginx/conf.d"
 HUB_GODDARD_UNICORE="hub.goddard.unicore.io"
 
+# ensure proxy is runnable
+sh /var/goddard/agent/scripts/proxy.sh
+
 last_ret_code=$1
 
 NEW_VIRTUAL_HOST() {
